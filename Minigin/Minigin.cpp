@@ -265,6 +265,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& input = InputManager::GetInstance();
 
 	load();
+	std::cout << "\n\nStarting main loop\n\n";
 	float fps = 60;
 	float fixed_time_step = 1000.f / fps;
 	// todo: this update loop could use some work.
