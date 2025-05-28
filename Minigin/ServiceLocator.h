@@ -11,6 +11,10 @@ public:
         return *m_SoundSystem;
     }
 
+    static void DestroyAll() {
+		if (m_SoundSystem != nullptr)
+            delete m_SoundSystem;
+    }
 private:
     static inline ISoundSystem* m_SoundSystem = nullptr;
 };

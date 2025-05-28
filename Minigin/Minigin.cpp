@@ -61,17 +61,19 @@ void PrintSDLVersion()
 
 dae::Minigin::Minigin(const std::string &dataPath)
 {
+	
 	std::cout << "Initializing Minigin" << std::endl;
-	if (!SteamAPI_Init())
-	{
-		std::cerr << "Fatal error - Steam must be running to play this game (SteamAPI_Init() failed)." << std::endl;
-	}
-	else
-	{
-		std::cout << "Succesfully initialized SteamAPI" << std::endl;
-	}
-	SteamUserStats()->RequestCurrentStats();
-	SteamUserStats()->RequestCurrentStats();
+	//if (!SteamAPI_Init())
+	//{
+	//	std::cerr << "Fatal error - Steam must be running to play this game //(SteamAPI_Init() failed)." << std::endl;
+	//}
+	//else
+	//{
+	//	std::cout << "Succesfully initialized SteamAPI" << std::endl;
+	//}
+	//SteamUserStats()->RequestCurrentStats();
+	//SteamUserStats()->RequestCurrentStats();
+
 	PrintSDLVersion();
 	
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
@@ -100,7 +102,7 @@ dae::Minigin::Minigin(const std::string &dataPath)
 
 dae::Minigin::~Minigin()
 {
-	SteamAPI_Shutdown();
+	//SteamAPI_Shutdown();
 	InputManager::GetInstance();
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(g_window);
@@ -276,7 +278,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		last_time = current_time;
 		lag += delta_time;
 
-		SteamAPI_RunCallbacks();
+		//SteamAPI_RunCallbacks();
 
 		while (lag >= fixed_time_step)
 		{
