@@ -31,64 +31,31 @@
 
 std::string baseDataPath = "../Data/";
 
+enum class GameState {
+	mainMenu,
+	level1,
+};
+
 using namespace dae;
 class Game
 {
 public:
+	static GameState gameState;
 	void load()
 	{
-		//auto& sceneManager = dae::SceneManager::GetInstance();
-		//auto& scene = sceneManager.CreateScene("main");
-		//auto baseObject = std::make_shared<dae::GameObject>(nullptr);
-		//auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 24);
-		//auto fontSmall = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 12);
-		//auto explainingTextPlayer1 = new dae::TextComponent("Use WASD to move pacman, F to deal damage to pacman and V to add score to pacman (in 10s)", fontSmall, baseObject.get());
-		//auto explainingTextPlayer2pt1 = new dae::TextComponent("Use D-PAD to move pacman (but with a fancy hat), G to deal damage to pacman (but with a fancy hat)", fontSmall, baseObject.get());
-		//auto explainingTextPlayer2pt2 = new dae::TextComponent("and B to add score to pacman (but with a fancy hat) (in 100s)", fontSmall, baseObject.get());
-		//auto explainingTextPlayer2pt3 = new dae::TextComponent("[NOTE ACHIEVEMENT ONLY WORKS FOR FANCY HAT (for testing)]", fontSmall, baseObject.get());
-		//explainingTextPlayer1->SetPosition(10, 80);
-		//explainingTextPlayer2pt1->SetPosition(10, 95);
-		//explainingTextPlayer2pt2->SetPosition(10, 110);
-		//explainingTextPlayer2pt3->SetPosition(10, 125);
-		//auto firstLogo = std::make_shared<dae::GameObject>(baseObject.get());
-		//firstLogo->SetTexture("logo.tga");
-		//auto rotatorComponent = new dae::RotatorComponent{ 100, 100, firstLogo.get() };
-		//auto secondLogo = std::make_shared<dae::GameObject>(firstLogo.get());
-		//secondLogo->SetTexture("logo.tga");
-		//rotatorComponent = new dae::RotatorComponent{ 100, -200, secondLogo.get() };
-		//scene.Add(baseObject);
-		//auto player1Object = std::make_shared<dae::GameObject>(nullptr);
-		//player1Object->SetTexture("pacman.png");
-		//Player* player1 = new Player(player1Object.get(), 300);
-		//player1Object->SetLocalPosition(glm::vec3{ 170, 200, 0 });
-
-		// TEST
-		// TEST
-		// TEST
-		std::cout << "test";
+		std::cout << "\n\nBegin load:\n\n";
 		// init audio
 		ServiceLocator::Provide(new SDLSoundSystem(baseDataPath));
 		ServiceLocator::GetSoundSystem().LoadSound("pew", "bp_missile_large.ogg");
 
-
-
-		int numAchievements = SteamUserStats()->GetNumAchievements();
-
-		for (int i = 0; i < numAchievements; ++i) {
-			const char* achievementID = SteamUserStats()->GetAchievementName(i);
-
-			if (achievementID) {
-				std::cout << "Resetting achievement: " << achievementID << std::endl;
-				SteamUserStats()->ClearAchievement(achievementID);
-			}
-		}
-
-		if (SteamUserStats()->StoreStats()) {
-			std::cout << "All achievements have been reset!" << std::endl;
-		}
-		else {
-			std::cerr << "Failed to store stats after resetting achievements." << std::endl;
-		}
+		//int numAchievements = SteamUserStats()->GetNumAchievements()
+		//for (int i = 0; i < numAchievements; ++i)
+		//if (SteamUserStats()->StoreStats()) {
+		//	std::cout << "All achievements have been reset!" << std::endl;
+		//}
+		//else {
+		//	std::cerr << "Failed to store stats after resetting achievements." //std::endl;
+		//}
 
 		auto& input = InputManager::GetInstance();
 		auto& sceneManager = SceneManager::GetInstance();
@@ -149,7 +116,7 @@ public:
 		public:
 			void execute() override
 			{
-				ServiceLocator::GetSoundSystem().PlaySoundW("pew");
+				ServiceLocator::GetSoundSystem().PlaySound("pew");
 			}
 		};
 		// Add play sound on
@@ -225,11 +192,35 @@ private:
 	std::shared_ptr<GameObject> player2Object;
 };
 
+void loadMainMenu()
+{
+
+	auto& sceneManager = SceneManager::GetInstance();
+
+	auto& mainMenuScene = sceneManager.CreateScene("MainMenu");
+	Game::gameState = GameState::mainMenu;
+	
+	auto go = std::make_shared<dae::GameObject>(nullptr);
+	go->SetTexture("background.tga");
+	mainMenuScene.Add(go);
+
+
+	go = std::make_shared<dae::GameObject>(nullptr);
+	go->SetTexture("logo.tga");
+	go->SetLocalPosition(glm::vec3{ 216, 180 , 0 });
+	mainMenuScene.Add(go);
+
+
+	go = std::make_shared<dae::GameObject>(nullptr);
+	go->SetTexture("start.png");
+}
+
 int main(int, char* []) {
 
 	Game game;
 	dae::Minigin engine(baseDataPath);
 	engine.Run([&game]() { game.load(); });
 
+	ServiceLocator::DestroyAll();
 	return 0;
 }

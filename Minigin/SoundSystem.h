@@ -100,7 +100,9 @@ struct SDLSoundSystem::Impl {
 };
 
 SDLSoundSystem::SDLSoundSystem(std::string& audioBasePath) : m_pImpl(new Impl(audioBasePath)) {}
-SDLSoundSystem::~SDLSoundSystem() = default;
+SDLSoundSystem::~SDLSoundSystem() {
+	delete m_pImpl;
+};
 
 void SDLSoundSystem::LoadSound(const std::string& id, const std::string& path) {
     // Lambda to use multithreading sucesfully
