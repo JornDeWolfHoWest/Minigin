@@ -106,7 +106,7 @@ void dae::GameObject::Render() const
 	if (m_texture != nullptr)
 	{
 		const auto& pos = m_WorldPosition;
-		Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y, 50,50);
+		Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y);
 	}
 	for (int index = 0; index < int(m_Components.size()); index++)
 	{
