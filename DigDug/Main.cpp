@@ -31,16 +31,44 @@
 
 std::string baseDataPath = "../Data/";
 
-enum class GameState {
-	mainMenu,
-	level1,
-};
 
 using namespace dae;
 class Game
 {
 public:
-	static GameState gameState;
+
+	void loadMainMenu()
+	{
+		std::cout << "\n\nBegin load Main Menu:\n\n";
+		//auto& input = InputManager::GetInstance();
+		auto& sceneManager = SceneManager::GetInstance();
+		ResourceManager::GetInstance().LoadTexture("OtherSpriteSheet.png");
+		auto& mainMenuScene = sceneManager.CreateScene("MainMenu");
+
+		//go = std::make_shared<dae::GameObject>(nullptr);
+		//go->SetTexture("background.tga");
+		//mainMenuScene.Add(go);
+		//
+		//
+		//go = std::make_shared<dae::GameObject>(nullptr);
+		//go->SetTexture("OtherSpriteSheet.png");
+		//go->SetLocalPosition(glm::vec3{ 216, 180 , 0 });
+		//mainMenuScene.Add(go);
+
+
+		gameObject = std::make_shared<dae::GameObject>(nullptr);
+
+		// spawn text in middle
+		auto textComponent = new TextComponent("1 Player", ResourceManager::GetInstance().LoadFont("dig-dug-arcade-font.otf", 12), gameObject.get());
+		textComponent->SetPosition(220, 220);
+
+		textComponent = new TextComponent("2 Players", ResourceManager::GetInstance().LoadFont("dig-dug-arcade-font.otf", 12), gameObject.get());
+		textComponent->SetPosition(220, 250);
+
+		mainMenuScene.Add(gameObject);
+
+	}
+
 	void load()
 	{
 		std::cout << "\n\nBegin load:\n\n";
@@ -56,23 +84,28 @@ public:
 		//else {
 		//	std::cerr << "Failed to store stats after resetting achievements." //std::endl;
 		//}
-
 		auto& input = InputManager::GetInstance();
 		auto& sceneManager = SceneManager::GetInstance();
 
 		auto& demoScene = sceneManager.CreateScene("Demo");
 
-		go = std::make_shared<dae::GameObject>(nullptr);
-		go->SetTexture("background.tga");
-		demoScene.Add(go);
+		loadMainMenu();
+
+		if (true)
+			return;
+
+
+		gameObject = std::make_shared<dae::GameObject>(nullptr);
+		gameObject->SetTexture("background.tga");
+		demoScene.Add(gameObject);
 		
-		go = std::make_shared<dae::GameObject>(nullptr);
-		go->SetTexture("logo.tga");
-		go->SetLocalPosition(glm::vec3{ 216, 180 , 0 });
-		demoScene.Add(go);
+		gameObject = std::make_shared<dae::GameObject>(nullptr);
+		gameObject->SetTexture("logo.tga");
+		gameObject->SetLocalPosition(glm::vec3{ 216, 180 , 0 });
+		demoScene.Add(gameObject);
 
 		font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-		auto a = new dae::TextComponent("Programming 4 Assignment", font, go.get());
+		auto a = new dae::TextComponent("Programming 4 Assignment", font, gameObject.get());
 		a->SetPosition(80, 20);
 
 		auto& scene = sceneManager.CreateScene("main");
@@ -180,7 +213,7 @@ public:
 		*/
 	}
 private:
-	std::shared_ptr<GameObject> go;
+	std::shared_ptr<GameObject> gameObject;
 	std::shared_ptr<TextComponent> to;
 	std::shared_ptr<Font> fontSmall;
 	std::shared_ptr<Font> font;
@@ -192,28 +225,6 @@ private:
 	std::shared_ptr<GameObject> player2Object;
 };
 
-void loadMainMenu()
-{
-
-	auto& sceneManager = SceneManager::GetInstance();
-
-	auto& mainMenuScene = sceneManager.CreateScene("MainMenu");
-	Game::gameState = GameState::mainMenu;
-	
-	auto go = std::make_shared<dae::GameObject>(nullptr);
-	go->SetTexture("background.tga");
-	mainMenuScene.Add(go);
-
-
-	go = std::make_shared<dae::GameObject>(nullptr);
-	go->SetTexture("logo.tga");
-	go->SetLocalPosition(glm::vec3{ 216, 180 , 0 });
-	mainMenuScene.Add(go);
-
-
-	go = std::make_shared<dae::GameObject>(nullptr);
-	go->SetTexture("start.png");
-}
 
 int main(int, char* []) {
 
