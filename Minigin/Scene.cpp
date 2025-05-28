@@ -11,6 +11,11 @@ Scene::Scene(const std::string& name) : m_name(name) {}
 
 Scene::~Scene() = default;
 
+std::string& dae::Scene::GetName() const
+{
+	return const_cast<std::string&>(m_name);
+}
+
 void Scene::Add(std::shared_ptr<GameObject> object)
 {
 	m_objects.emplace_back(std::move(object));
