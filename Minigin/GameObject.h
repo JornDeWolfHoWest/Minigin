@@ -15,7 +15,6 @@ namespace dae
 		virtual void FixedUpdate();
 		virtual void Render() const;
 
-		void SetTexture(const std::string& filename);
 		void SetLocalPosition(glm::vec3 position);
 		void UpdateWorldPosition();
 		glm::vec3& GetLocalPosition();
@@ -49,7 +48,5 @@ namespace dae
 		std::vector<BaseComponent*> m_Components{};
 		glm::vec3 m_WorldPosition{};
 		glm::vec3 m_LocalPosition{};
-		// todo: mmm, every gameobject has a texture? Is that correct?
-		std::shared_ptr<Texture2D> m_texture{};
 	};
 }
