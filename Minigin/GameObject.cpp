@@ -103,11 +103,7 @@ void dae::GameObject::FixedUpdate()
 
 void dae::GameObject::Render() const
 {
-	if (m_texture != nullptr)
-	{
-		const auto& pos = m_WorldPosition;
-		Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y);
-	}
+	
 	for (int index = 0; index < int(m_Components.size()); index++)
 	{
 		m_Components[index]->Render();
@@ -118,10 +114,6 @@ void dae::GameObject::Render() const
 	}
 }
 
-void dae::GameObject::SetTexture(const std::string& filename)
-{
-	m_texture = ResourceManager::GetInstance().LoadTexture(filename);
-}
 
 void dae::GameObject::SetLocalPosition(glm::vec3 position)
 {
