@@ -63,7 +63,7 @@ void dae::GameObject::MarkForDeletion()
 	m_MarkedForDeletion = true;
 }
 
-dae::GameObject::GameObject(GameObject* parent)
+dae::GameObject::GameObject(std::shared_ptr<GameObject> parent)
 {
 	SetParent(parent, false);
 }
@@ -145,9 +145,9 @@ glm::vec3& dae::GameObject::GetWorldPosition()
 	return m_WorldPosition;
 }
 
-void dae::GameObject::SetParent(GameObject* parent, bool keepWorldPosition)
+void dae::GameObject::SetParent(std::shared_ptr<GameObject> parent, bool keepWorldPosition)
 {
-	if (IsChild(parent) || parent == this || m_Parent == parent)
+	if (IsChild(parent.get()) || parent.get() == this || m_Parent == parent)
 		return;
 	if (parent == nullptr)
 		SetLocalPosition(GetWorldPosition());

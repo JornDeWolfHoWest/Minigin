@@ -20,7 +20,7 @@ namespace dae
 		glm::vec3& GetLocalPosition();
 		glm::vec3& GetWorldPosition();
 		
-		void SetParent(GameObject* parent, bool keepWorldPosition);
+		void SetParent(std::shared_ptr<GameObject> parent, bool keepWorldPosition);
 
 		bool IsChild(GameObject* child) const;
 		void AddChild(GameObject* child);
@@ -33,17 +33,13 @@ namespace dae
 		void DeleteObject();
 		void MarkForDeletion();
 		
-		GameObject(GameObject* parent);
+		GameObject(std::shared_ptr<GameObject> parent);
 		virtual ~GameObject();
-		GameObject(const GameObject& other) = delete;
-		GameObject(GameObject&& other) = delete;
-		GameObject& operator=(const GameObject& other) = delete;
-		GameObject& operator=(GameObject&& other) = delete;
 
 	private:
 		bool m_DirtyPosition{};
 		bool m_MarkedForDeletion{};
-		GameObject* m_Parent{};
+		std::shared_ptr<GameObject> m_Parent{};
 		std::vector<GameObject*> m_Children{};
 		std::vector<BaseComponent*> m_Components{};
 		glm::vec3 m_WorldPosition{};
