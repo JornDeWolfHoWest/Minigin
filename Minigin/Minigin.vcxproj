@@ -283,6 +283,7 @@ xcopy $(SolutionDir)minigin\steam_appid.txt $(OutputPath) /Y</Command>
     <ClInclude Include="..\3rdParty\steamworks\public\steam\steam_api_internal.h" />
     <ClInclude Include="..\3rdParty\steamworks\public\steam\steam_gameserver.h" />
     <ClInclude Include="BaseComponent.h" />
+    <ClInclude Include="Commands.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="GameObject.h" />
