@@ -87,6 +87,13 @@ namespace dae
                 delete command;
             }
         }
+        void DeleteAllKeys() {
+            for (auto key : m_KeyCommands) {
+                delete key;
+            }
+			m_KeyCommands.clear();
+			m_BreakCommands = true;
+        }
 
 		void AddKeyCommand(KeyCommand* keyCommand) {
 			m_KeyCommands.push_back(keyCommand);
@@ -105,12 +112,20 @@ namespace dae
                 if (e.type == SDL_KEYDOWN) {
                     for (KeyCommand* command : m_KeyCommands)
                     {
+						if (m_BreakCommands) {
+							m_BreakCommands = false;
+							return true;
+						}
 						command->DownExecute(e.key.keysym.sym);
                     }
                 }
                 if (e.type == SDL_KEYUP) {
                     for (KeyCommand* command : m_KeyCommands)
                     {
+                        if (m_BreakCommands) {
+                            m_BreakCommands = false;
+                            return true;
+                        }
                         command->UpExecute(e.key.keysym.sym);
                     }
                 }
@@ -124,6 +139,10 @@ namespace dae
 
                 for (ControllerButtonCommand* controllerCommand : m_ControllerButtonCommands)
                 {
+                    if (m_BreakCommands) {
+                        m_BreakCommands = false;
+                        return true;
+                    }
                     controllerCommand->Execute(buttons);
                 }
             }
@@ -136,6 +155,7 @@ namespace dae
     private:
 		std::vector<ControllerButtonCommand*> m_ControllerButtonCommands{};
         std::vector<KeyCommand*> m_KeyCommands{};
+        bool m_BreakCommands{ false };
 	};
 
 }
