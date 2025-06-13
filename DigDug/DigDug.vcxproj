@@ -19,27 +19,29 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Minigin\Commands.cpp" />
     <ClCompile Include="..\Minigin\FPSComponent.cpp" />
     <ClCompile Include="..\Minigin\HealthDisplay.cpp" />
-    <ClCompile Include="..\Minigin\Player.cpp" />
     <ClCompile Include="..\Minigin\RotatorComponent.cpp" />
     <ClCompile Include="..\Minigin\ScoreAchievementComponent.cpp" />
     <ClCompile Include="..\Minigin\ScoreDisplayComponent.cpp" />
     <ClCompile Include="..\Minigin\TextComponent.cpp" />
+    <ClCompile Include="CheckForPlayerComponent.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="SelectorArrow.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Minigin\Commands.h" />
     <ClInclude Include="..\Minigin\FPSComponent.h" />
     <ClInclude Include="..\Minigin\HealthChangedEvent.h" />
     <ClInclude Include="..\Minigin\HealthDisplay.h" />
-    <ClInclude Include="..\Minigin\Player.h" />
     <ClInclude Include="..\Minigin\RotatorComponent.h" />
     <ClInclude Include="..\Minigin\ScoreAchievementComponent.h" />
     <ClInclude Include="..\Minigin\ScoreChangedEvent.h" />
     <ClInclude Include="..\Minigin\ScoreDisplayComponent.h" />
     <ClInclude Include="..\Minigin\TextComponent.h" />
+    <ClInclude Include="CheckForPlayerComponent.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="SelectorArrow.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
