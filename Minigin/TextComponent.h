@@ -16,6 +16,7 @@ namespace dae
         void Update(const float& deltaTime) override;
         void FixedUpdate() override {};
         void Render() const override;
+        glm::vec3 GetPosition();
         void SetPosition(float x, float y);
         void SetText(std::string text);
 

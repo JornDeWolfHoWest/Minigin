@@ -54,6 +54,11 @@ namespace dae
         }
     }
 
+    glm::vec3 TextComponent::GetPosition()
+    {
+        return m_transform.GetPosition();
+    }
+
     void TextComponent::SetPosition(const float x, const float y)
     {
         m_transform.SetPosition(x, y, 0.0f);
