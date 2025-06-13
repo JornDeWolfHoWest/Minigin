@@ -38,3 +38,11 @@ void dae::SceneManager::DeleteScene(const std::string& name)
 		}
 	}
 }
+void dae::SceneManager::DeleteAllScenes()
+{
+	for (auto scene : m_scenes)
+	{
+		scene.reset();
+	}
+	m_scenes.clear();
+}

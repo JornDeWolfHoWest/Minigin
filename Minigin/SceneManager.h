@@ -12,6 +12,7 @@ namespace dae
 	public:
 		Scene& CreateScene(const std::string& name);
 		void DeleteScene(const std::string& name);
+		void DeleteAllScenes();
 
 		void Update(const float& delta_time);
 		void Render();
