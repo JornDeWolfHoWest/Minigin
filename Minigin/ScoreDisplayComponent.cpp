@@ -14,6 +14,16 @@
 namespace dae {
 	void ScoreDisplayComponent::Update(const float& deltaTime)
 	{
+		if(m_Score != m_PreviousScore)
+		{
+			m_PreviousScore = m_Score;
+			std::cout << "Player score: " << m_Score << std::endl;
+
+
+			std::string score = std::to_string(m_Score);
+
+			m_TextComponent->SetText(score);
+		}
 		m_TextComponent->Update(deltaTime);
 	}
 
@@ -22,29 +32,15 @@ namespace dae {
 		m_TextComponent->Render();
 	}
 
-	void ScoreDisplayComponent::Update(const Event& event)
-	{
-		if (event.GetType() == EventType::ScoreChanged)
-		{
-			const ScoreChangedEvent& scoreEvent = static_cast<const ScoreChangedEvent&>(event);
-			std::cout << "Player score: " << scoreEvent.GetScore() << std::endl;
-
-
-			std::string score = "Score: " + std::to_string(scoreEvent.GetScore());
-
-			m_TextComponent->SetText(score);
-			m_TextComponent->Update(0.f);
-		}
-	}
-
 	void ScoreDisplayComponent::SetPosition(float x, float y)
 	{
 		m_TextComponent->SetPosition(x, y);
 	}
-
-	ScoreDisplayComponent::ScoreDisplayComponent(std::shared_ptr<Font> font, GameObject* pOwner) :
+	
+	ScoreDisplayComponent::ScoreDisplayComponent(std::shared_ptr<Font> font, GameObject* pOwner, int& score) :
 		BaseComponent(pOwner),
-		m_TextComponent(new TextComponent{ "Score: ", font, pOwner })
+		m_TextComponent(new TextComponent{ "Score: ", font, pOwner }),
+		m_Score(score)
 	{
 	}
 

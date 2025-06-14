@@ -11,19 +11,7 @@ public:
 	CheckForPlayerComponent(dae::GameObject* pOwner, dae::GameObject* pPlayerObject, dae::TextureComponent* pTextureComponent, int& score)
 		: BaseComponent(pOwner), m_PlayerObject(pPlayerObject), m_pTextureComponent(pTextureComponent), m_Score(score) {
 	}
-	void Update(const float&) override
-	{
-		if (m_PlayerObject)
-		{
-			glm::vec3 playerPos = m_PlayerObject->GetWorldPosition();
-			glm::vec3 objectPos = GetOwner()->GetWorldPosition();
-			if (glm::distance(playerPos, objectPos) < 16.0f)
-			{
-				m_pTextureComponent->SetDrawSize(0, 0);
-				m_Score += 10;
-			}
-		}
-	}
+	void Update(const float&) override;
 
 	void FixedUpdate() override {}
 	void Render() const override {}

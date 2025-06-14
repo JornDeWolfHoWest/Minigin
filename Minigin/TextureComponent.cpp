@@ -25,8 +25,25 @@ void dae::TextureComponent::SetSrcRect(const float x, const float y, const float
 	m_SrcHeight = height;
 }
 
+glm::vec2 dae::TextureComponent::GetDrawSize() const
+{
+	return glm::vec2{ m_DrawWidth, m_DrawHeight };
+}
+
+bool dae::TextureComponent::IsEnabled() const
+{
+	return m_Enabled;
+}
+
+void dae::TextureComponent::SetEnabled(bool isEnabled)
+{
+	m_Enabled = isEnabled;
+}
+
 void dae::TextureComponent::Render() const
 {
+	if (not m_Enabled)
+		return;
 	const auto& pos = GetOwner()->GetWorldPosition();
 	Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y, m_DrawWidth, m_DrawHeight, m_SrcX, m_SrcY, m_SrcWidth, m_SrcHeight);
 }

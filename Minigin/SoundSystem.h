@@ -3,8 +3,13 @@
 
 // ISoundSystem.h
 class ISoundSystem {
+protected:
+	bool m_Muted{ false };
 public:
     virtual ~ISoundSystem() = default;
+    virtual bool GetMute() { return m_Muted; };
+    virtual void SetMute(bool muted) = 0;
+    virtual void StopAllSounds() = 0;
     virtual void PlaySound(const std::string& soundID) = 0;
     virtual void LoadSound(const std::string& soundID, const std::string& path) = 0;
 };
@@ -15,6 +20,8 @@ public:
     SDLSoundSystem(std::string& audioBasePath);
     ~SDLSoundSystem() override;
 
+    void StopAllSounds() override;
+    void SetMute(bool muted) override;
     void PlaySound(const std::string& soundID) override;
     void LoadSound(const std::string& soundID, const std::string& path) override;
 
@@ -107,6 +114,28 @@ SDLSoundSystem::~SDLSoundSystem() {
 void SDLSoundSystem::LoadSound(const std::string& id, const std::string& path) {
     // Lambda to use multithreading sucesfully
     m_pImpl->Enqueue([=] { m_pImpl->Load(id, path); });
+}
+
+inline void SDLSoundSystem::StopAllSounds()
+{
+	m_pImpl->Enqueue([=] {
+		for (auto& [_, chunk] : m_pImpl->m_Sounds) {
+			Mix_HaltChannel(-1); // Stop all channels
+		}
+		});
+}
+
+void SDLSoundSystem::SetMute(bool muted)
+{
+	m_Muted = muted;
+    // set audio to 0 not pause
+	if (muted) {
+		Mix_Volume(-1, 0); // Mute all channels
+	}
+	else {
+		Mix_Volume(-1, MIX_MAX_VOLUME); // Restore volume to max
+	}
+	// Notify the queue that the mute state has changed
 }
 
 void SDLSoundSystem::PlaySound(const std::string& id) {

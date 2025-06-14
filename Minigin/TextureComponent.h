@@ -16,11 +16,15 @@ namespace dae
 		void FixedUpdate() override {}
 		void Render() const;
 		void SetSrcRect(const float x, const float y, const float width, const float height);
+		glm::vec2 GetDrawSize() const;
+		bool IsEnabled() const;
+		void SetEnabled(bool isEnabled);
 		void SetDrawSize(const float width, const float height);
 	private:
 		float m_SrcX{0}, m_SrcY{0}, m_SrcWidth{0}, m_SrcHeight{0},
 			m_DrawWidth{0}, m_DrawHeight{0};
 
+		bool m_Enabled{ true };
 		std::shared_ptr<Texture2D> m_texture{};
 	};
 

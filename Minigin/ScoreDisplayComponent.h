@@ -8,18 +8,16 @@
 
 namespace dae
 {
-    class ScoreDisplayComponent final : public BaseComponent, public Observer
+    class ScoreDisplayComponent final : public BaseComponent
     {
 
     public:
-        void Update(const Event& event) override;
-
         void Update(const float& deltaTime) override;
         void FixedUpdate() override {};
         void Render() const override;
         void SetPosition(float x, float y);
 
-        ScoreDisplayComponent(std::shared_ptr<Font> font, GameObject* pOwner);
+        ScoreDisplayComponent(std::shared_ptr<Font> font, GameObject* pOwner, int& score);
         virtual ~ScoreDisplayComponent();
         ScoreDisplayComponent(const ScoreDisplayComponent& other) = delete;
         ScoreDisplayComponent(ScoreDisplayComponent&& other) = delete;
@@ -28,5 +26,7 @@ namespace dae
 
     private:
         TextComponent* m_TextComponent;
+		int& m_Score;
+		int m_PreviousScore{ INT_MIN };
     };
 }

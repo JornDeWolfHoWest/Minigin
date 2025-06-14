@@ -17,24 +17,28 @@ namespace dae
 {
     class ControllerButtonCommand {
     public:
-        ControllerButtonCommand(int buttonToPress, Command* downCommand, Command* upCommand)
-            : m_DownCommand(downCommand), m_UpCommand(upCommand), m_KeyToPress(buttonToPress)
+        ControllerButtonCommand(int buttonToPress, int controllerIndex, Command* downCommand, Command* upCommand)
+            : m_DownCommand(downCommand), m_ControllerIndex(controllerIndex), m_UpCommand(upCommand), m_KeyToPress(buttonToPress)
         {
         }
         ~ControllerButtonCommand() {
             delete m_DownCommand;
             delete m_UpCommand;
         }
-        void Execute(WORD buttonsPressed) {
+        void Execute(WORD buttonsPressed, int controllerIndex) {
+            if (m_ControllerIndex != -1 and m_ControllerIndex != controllerIndex)
+                return;
             if (buttonsPressed & m_KeyToPress)
             {
-                if (m_DownCommand != nullptr)
+                if (m_DownCommand != nullptr and not m_IsPressed)
                 {
+                    m_IsPressed = true;
                     m_DownCommand->execute();
                 }
             }
-            else
+            else if (m_IsPressed)
             {
+                m_IsPressed = false;
                 if (m_UpCommand != nullptr)
                 {
 					m_UpCommand->execute();
@@ -42,9 +46,11 @@ namespace dae
             }
         }
     private:
+		bool m_IsPressed{ false };
         Command* m_DownCommand{};
         Command* m_UpCommand{};
         int m_KeyToPress{};
+		int m_ControllerIndex{};
     };
     class KeyCommand {
     public:
@@ -92,7 +98,25 @@ namespace dae
                 delete key;
             }
 			m_KeyCommands.clear();
+            for (auto key : m_ControllerButtonCommands) {
+                delete key;
+            }
+            m_ControllerButtonCommands.clear();
 			m_BreakCommands = true;
+        }
+        void DeleteAllKeyboardKeys() {
+            for (auto key : m_KeyCommands) {
+                delete key;
+            }
+            m_KeyCommands.clear();
+            m_BreakCommands = true;
+        }
+        void DeleteAllControllerKeys() {
+            for (auto key : m_ControllerButtonCommands) {
+                delete key;
+            }
+            m_ControllerButtonCommands.clear();
+            m_BreakCommands = true;
         }
 
 		void AddKeyCommand(KeyCommand* keyCommand) {
@@ -132,22 +156,26 @@ namespace dae
                 ImGui_ImplSDL2_ProcessEvent(&e);
             }
 
-            XINPUT_STATE state = {};
-            DWORD dwResult = XInputGetState(0, &state);
-            if (dwResult == ERROR_SUCCESS) {
-                WORD buttons = state.Gamepad.wButtons;
+            for (int controllerIndex = 0; controllerIndex < 2; controllerIndex++)
+            {
+                XINPUT_STATE state = {};
+                DWORD dwResult = XInputGetState(controllerIndex, &state);
+                if (dwResult == ERROR_SUCCESS) {
+                    WORD buttons = state.Gamepad.wButtons;
 
-                for (ControllerButtonCommand* controllerCommand : m_ControllerButtonCommands)
-                {
-                    if (m_BreakCommands) {
-                        m_BreakCommands = false;
-                        return true;
+                    for (ControllerButtonCommand* controllerCommand : m_ControllerButtonCommands)
+                    {
+                        if (m_BreakCommands) {
+                            m_BreakCommands = false;
+                            return true;
+                        }
+                        controllerCommand->Execute(buttons, controllerIndex);
                     }
-                    controllerCommand->Execute(buttons);
                 }
-            }
-            else {
-                //std::cout << "Controller not connected." << std::endl;
+                else {
+                    std::cout << "Controller not connected." << std::endl;
+                }
+
             }
             return true;
         }

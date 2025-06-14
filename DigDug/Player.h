@@ -77,9 +77,6 @@ public:
 		//		velocity.x = -32;
 		//	velocity.y = 0;
 		//}
-		//else
-		//	velocity.x = 0;
-		//	velocity.y = 0;
 
 		pos.x += velocity.x * deltaTime;
 		pos.y += velocity.y * deltaTime;
