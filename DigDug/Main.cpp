@@ -307,8 +307,8 @@ public:
 
 			if (controllerMainPlayer)
 			{
-				input.AddControllerKeyCommand(new ControllerButtonCommand{ XINPUT_GAMEPAD_DPAD_UP, 2, new MoveCommand(m_pPlayerOne, glm::vec3{ 0, -4, 1 }), new MoveCommand(m_pPlayerOne, glm::vec3{0,-4, 0}) });
-				input.AddControllerKeyCommand(new ControllerButtonCommand{ XINPUT_GAMEPAD_DPAD_DOWN, 1, new MoveCommand(m_pPlayerOne, glm::vec3{ 0, 4, 1 }), new MoveCommand(m_pPlayerOne, glm::vec3{0,4, 0}) });
+				input.AddControllerKeyCommand(new ControllerButtonCommand{ XINPUT_GAMEPAD_DPAD_UP, -1, new MoveCommand(m_pPlayerOne, glm::vec3{ 0, -4, 1 }), new MoveCommand(m_pPlayerOne, glm::vec3{0,-4, 0}) });
+				input.AddControllerKeyCommand(new ControllerButtonCommand{ XINPUT_GAMEPAD_DPAD_DOWN, -1, new MoveCommand(m_pPlayerOne, glm::vec3{ 0, 4, 1 }), new MoveCommand(m_pPlayerOne, glm::vec3{0,4, 0}) });
 
 				input.AddControllerKeyCommand(new ControllerButtonCommand{ XINPUT_GAMEPAD_DPAD_LEFT, -1, new MoveCommand(m_pPlayerOne, glm::vec3{ -4, 0, 1 }), new MoveCommand(m_pPlayerOne, glm::vec3{-4,0, 0}) });
 				input.AddControllerKeyCommand(new ControllerButtonCommand{ XINPUT_GAMEPAD_DPAD_RIGHT, -1, new MoveCommand(m_pPlayerOne, glm::vec3{ 4, 0, 1 }), new MoveCommand(m_pPlayerOne, glm::vec3{4, 0, 0 }) });
