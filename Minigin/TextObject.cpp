@@ -5,14 +5,16 @@
 #include "Font.h"
 #include "Texture2D.h"
 
-dae::TextObject::TextObject(const std::string& text, std::shared_ptr<Font> font, const SDL_Color& color)
-	: m_needsUpdate(true), m_text(text), m_color(color), m_font(std::move(font)), m_textTexture(nullptr)
+dae::TextObject::TextObject(GameObject* parent, const std::string& text, std::shared_ptr<Font> font, const SDL_Color& color)
+	: GameObject(parent), m_needsUpdate(true), m_text(text), m_color(color), m_font(std::move(font)), m_textTexture(nullptr)
 { }
 
-void dae::TextObject::Update()
+void dae::TextObject::Update(const float& deltatime)
 {
 	if (m_needsUpdate)
 	{
+		if (m_textTexture)
+			m_textTexture.reset();
 		const auto surf = TTF_RenderText_Blended(m_font->GetFont(), m_text.c_str(), m_text.length(), m_color);
 		if (surf == nullptr) 
 		{
@@ -27,6 +29,7 @@ void dae::TextObject::Update()
 		m_textTexture = std::make_shared<Texture2D>(texture);
 		m_needsUpdate = false;
 	}
+	GameObject::Update(deltatime);
 }
 
 void dae::TextObject::Render() const

@@ -1,6 +1,9 @@
 ﻿#include <stdexcept>
 #include <sstream>
 #include <iostream>
+#include <thread>
+
+using namespace std::chrono;
 
 #if WIN32
 #define WIN32_LEAN_AND_MEAN 
@@ -91,16 +94,36 @@ void dae::Minigin::Run(const std::function<void()>& load)
 {
 	load();
 #ifndef __EMSCRIPTEN__
-	while (!m_quit)
-		RunOneFrame();
+	auto& renderer = Renderer::GetInstance();
+	auto& sceneManager = SceneManager::GetInstance();
+	auto& input = InputManager::GetInstance();
+	
+	float fps = 120;
+	float fixed_time_step = 1000.f / fps;
+	
+	bool do_continue = true;
+	auto last_time = high_resolution_clock::now();
+	float lag = 0.0f;
+	while (do_continue)
+	{
+		const auto current_time = high_resolution_clock::now();
+		const float delta_time = duration<float>(current_time - last_time).count();
+		last_time = current_time;
+		lag += delta_time;
+
+		do_continue = input.ProcessInput();
+		while (lag >= fixed_time_step)
+		{
+			sceneManager.FixedUpdate();
+			lag -= fixed_time_step;
+		}
+		sceneManager.Update(delta_time);
+		renderer.Render();
+
+		const auto sleep_time = current_time + milliseconds(int(fixed_time_step)) - high_resolution_clock::now();
+		std::this_thread::sleep_for(sleep_time);
+	}
 #else
 	emscripten_set_main_loop_arg(&LoopCallback, this, 0, true);
 #endif
-}
-
-void dae::Minigin::RunOneFrame()
-{
-	m_quit = !InputManager::GetInstance().ProcessInput();
-	SceneManager::GetInstance().Update();
-	Renderer::GetInstance().Render();
 }

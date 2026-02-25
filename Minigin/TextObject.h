@@ -11,15 +11,14 @@ namespace dae
 	class TextObject final : public GameObject
 	{
 	public:
-		void Update() override;
+		void Update(const float& deltaTime) override;
 		void Render() const override;
 
 		void SetText(const std::string& text);
 		void SetPosition(float x, float y);
 		void SetColor(const SDL_Color& color);
 
-		TextObject(const std::string& text, std::shared_ptr<Font> font, const SDL_Color& color = { 255, 255, 255, 255 });
-		virtual ~TextObject() = default;
+		TextObject(GameObject* parent, const std::string& text, std::shared_ptr<Font> font, const SDL_Color& color = { 255, 255, 255, 255 });
 		TextObject(const TextObject& other) = delete;
 		TextObject(TextObject&& other) = delete;
 		TextObject& operator=(const TextObject& other) = delete;
