@@ -2,9 +2,9 @@
 
 Minigin is a very small project using [SDL3](https://www.libsdl.org/) and [glm](https://github.com/g-truc/glm) for 2D c++ game projects. It is in no way a game engine, only a barebone start project where everything sdl related has been set up. It contains glm for vector math, to aleviate the need to write custom vector and matrix classes.
 
-[![Build Status](https://github.com/avadae/minigin/actions/workflows/cmake.yml/badge.svg)](https://github.com/avadae/cmake/actions)
-[![Build Status](https://github.com/avadae/minigin/actions/workflows/emscripten.yml/badge.svg)](https://github.com/avadae/emscripten/actions)
-[![GitHub Release](https://img.shields.io/github/v/release/avadae/minigin?logo=github&sort=semver)](https://github.com/avadae/minigin/releases/latest)
+[![Build Status](https://github.com/JornDeWolfHoWest/Minigin/actions/workflows/cmake.yml/badge.svg)](https://github.com/JornDeWolfHoWest/cmake/actions)
+[![Build Status](https://github.com/JornDeWolfHoWest/Minigin/actions/workflows/emscripten.yml/badge.svg)](https://github.com/JornDeWolfHoWest/emscripten/actions)
+[![GitHub Release](https://img.shields.io/github/v/release/JornDeWolfHoWest/Minigin?logo=github&sort=semver)](https://github.com/JornDeWolfHoWest/minigin/releases/latest)
 
 # Goal
 
@@ -80,7 +80,7 @@ Then browse to http://localhost:8000 and you're good to go.
 
 This project is build with github actions.
 - The CMake workflow builds the project in Debug and Release for Windows and serves as a check that the project builds on that platform.
-- The Emscripten workflow generates a web version of the project and publishes it as a [github page](https://avadae.github.io/minigin/). 
+- The Emscripten workflow generates a web version of the project and publishes it as a [github page](https://JornDeWolfHoWest.github.io/Minigin/). 
   - The url of that page will be `https://<username>.github.io/<repository>/`
 - You can embed this page with 
 
