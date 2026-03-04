@@ -12,6 +12,7 @@
 #include "Scene.h"
 #include "FPSComponent.h"
 #include "RotatorComponent.h"
+#include <iostream>
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -60,8 +61,150 @@ static void load()
 	secondLogo->AddComponent(rotatorComponent);
 	
 	scene.Add(std::move(baseObject));
-	
 }
+
+//std::cout << "Exercise 1\n";
+//const int arraySize = 100'000'000;
+//const int arraySize2 = 1'000'000;
+//const int sampleAmount = 10;
+//const int stepSizeLimit = 2048;
+//const int stepSizeTotalLog = int(std::log2(stepSizeLimit)) + 1;
+//
+//long long* samplesList = new long long[stepSizeTotalLog] {};
+//
+//int* list = new int[arraySize] {};
+//for (int samples = 0; samples < sampleAmount; samples++)
+//{
+//	for (int index = 0; index < arraySize; index++)
+//	{
+//		list[index] = 1;
+//	}
+//	int currentStepSampleIndex = 0;
+//	for (int stepSize = 1; stepSize <= stepSizeLimit; stepSize *= 2)
+//	{
+//		const auto start_time = std::chrono::high_resolution_clock::now();
+//		for (int index = 0; index < arraySize; index += stepSize)
+//		{
+//			list[index] *= 2;
+//		}
+//		const auto end_time = std::chrono::high_resolution_clock::now();
+//		auto delta_time = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
+//		samplesList[currentStepSampleIndex] += delta_time;
+//		++currentStepSampleIndex;
+//	}
+//
+//}
+//delete[] list;
+//for (int samplesNumber = 0; samplesNumber < stepSizeTotalLog; samplesNumber++)
+//{
+//	std::cout << samplesList[samplesNumber] / sampleAmount << "\n";
+//}
+//delete[] samplesList;
+//
+//struct Transform
+//{
+//	float matrix[16] = {
+//		1,0,0,0,
+//		0,1,0,0,
+//		0,0,1,0,
+//		0,0,0,1 };
+//};
+//
+//class GameObject3D
+//{
+//public:
+//	Transform transform{};
+//	int ID{};
+//};
+//
+//std::cout << "\nExercise 2\n";
+//long long* samplesList2 = new long long[stepSizeTotalLog] {};
+//
+//GameObject3D** list2 = new GameObject3D * [arraySize2] {};
+//for (int index = 0; index < arraySize2; index++)
+//{
+//	list2[index] = new GameObject3D();
+//}
+//for (int samples = 0; samples < sampleAmount; samples++)
+//{
+//	for (int index = 0; index < arraySize2; index++)
+//	{
+//		list2[index]->ID = 1;
+//	}
+//	int currentStepSampleIndex = 0;
+//	for (int stepSize = 1; stepSize <= stepSizeLimit; stepSize *= 2)
+//	{
+//		const auto start_time = std::chrono::high_resolution_clock::now();
+//		for (int index = 0; index < arraySize2; index += stepSize)
+//		{
+//			list2[index]->ID *= 2;
+//		}
+//		const auto end_time = std::chrono::high_resolution_clock::now();
+//		auto delta_time = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
+//		samplesList2[currentStepSampleIndex] += delta_time;
+//		++currentStepSampleIndex;
+//	}
+//}
+//for (int index = 0; index < arraySize2; index++)
+//{
+//	delete list2[index];
+//}
+//delete[] list2;
+//for (int samplesNumber = 0; samplesNumber < stepSizeTotalLog; samplesNumber++)
+//{
+//	std::cout << samplesList2[samplesNumber] / sampleAmount << "\n";
+//}
+//delete[] samplesList2;
+//
+//
+//class GameObject3DAlt
+//{
+//public:
+//	Transform* transform;
+//	int ID;
+//};
+//
+//std::cout << "\nExercise 2 Alt Setup\n";
+//long long* samplesList2Alt = new long long[stepSizeTotalLog] {};
+//
+//GameObject3DAlt** list2Alt = new GameObject3DAlt * [arraySize2] {};
+//for (int index = 0; index < arraySize2; index++)
+//{
+//	list2Alt[index] = new GameObject3DAlt();
+//	list2Alt[index]->transform = new Transform();
+//}
+//std::cout << "\nExercise 2 Alt Starting\n";
+//for (int samples = 0; samples < sampleAmount; samples++)
+//{
+//	for (int index = 0; index < arraySize2; index++)
+//	{
+//		list2Alt[index]->ID = 1;
+//	}
+//	int currentStepSampleIndex = 0;
+//	for (int stepSize = 1; stepSize <= stepSizeLimit; stepSize *= 2)
+//	{
+//		const auto start_time = std::chrono::high_resolution_clock::now();
+//		for (int index = 0; index < arraySize2; index += stepSize)
+//		{
+//			list2Alt[index]->ID *= 2;
+//		}
+//		const auto end_time = std::chrono::high_resolution_clock::now();
+//		auto delta_time = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
+//		samplesList2Alt[currentStepSampleIndex] += delta_time;
+//		++currentStepSampleIndex;
+//	}
+//}
+//for (int index = 0; index < arraySize2; index++)
+//{
+//	delete list2Alt[index]->transform;
+//	delete list2Alt[index];
+//}
+//delete[] list2Alt;
+//for (int samplesNumber = 0; samplesNumber < stepSizeTotalLog; samplesNumber++)
+//{
+//	std::cout << samplesList2Alt[samplesNumber] / sampleAmount << "\n";
+//}
+//delete[] samplesList2Alt;
 
 int main(int, char*[]) {
 #if __EMSCRIPTEN__
