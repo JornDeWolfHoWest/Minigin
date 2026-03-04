@@ -47,19 +47,16 @@ static void load()
 	
 	
 	auto baseObject = std::make_unique<dae::GameObject>(nullptr);
-	baseObject->SetLocalPosition(100, 100);
+	baseObject->SetLocalPosition(200, 200);
 	
 	auto firstLogo = new dae::GameObject{ baseObject.get() };
 	firstLogo->SetTexture("logo.png");
-	Transform middle;
-	middle.SetPosition(100, 100);
-	auto rotatorComponent = new RotatorComponent{ middle, 100, 100, firstLogo};
+	auto rotatorComponent = new RotatorComponent{ 100, 100, firstLogo};
 	firstLogo->AddComponent(rotatorComponent);
 	
 	auto secondLogo = new dae::GameObject(firstLogo);
 	secondLogo->SetTexture("logo.png");
-	middle.SetPosition(0, 0);
-	rotatorComponent = new dae::RotatorComponent{ middle, 100, -200, secondLogo };
+	rotatorComponent = new dae::RotatorComponent{ 100, -200, secondLogo };
 	secondLogo->AddComponent(rotatorComponent);
 	
 	scene.Add(std::move(baseObject));

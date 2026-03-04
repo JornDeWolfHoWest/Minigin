@@ -13,11 +13,10 @@ namespace dae {
         void FixedUpdate() override {};
         void Render() const override;
         void SetRadius(float radius);
-        void SetPosition(Transform middle);
         void SetSpeed(float speed);
 
-        RotatorComponent(Transform middle, float radius, float speed, GameObject* pOwner);
-        virtual ~RotatorComponent();
+        RotatorComponent(float radius, float speed, GameObject* pOwner);
+        virtual ~RotatorComponent() = default;
         RotatorComponent(const RotatorComponent& other) = delete;
         RotatorComponent(RotatorComponent&& other) = delete;
         RotatorComponent& operator=(const RotatorComponent& other) = delete;
@@ -25,7 +24,6 @@ namespace dae {
 
     private:
         float m_Radius{};
-        Transform m_Middle{};
         float m_Angle{};
         float m_Speed{};
     };

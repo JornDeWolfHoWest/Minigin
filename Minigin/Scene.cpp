@@ -42,7 +42,7 @@ void Scene::Update(const float& deltaTime)
 	}
 }
 
-void Scene::Render() const
+void Scene::Render()
 {
 	for (const auto& object : m_objects)
 	{

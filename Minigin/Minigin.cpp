@@ -101,17 +101,17 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	float fps = 120;
 	float fixed_time_step = 1000.f / fps;
 	
-	bool do_continue = true;
+	m_Continue = true;
 	auto last_time = high_resolution_clock::now();
 	float lag = 0.0f;
-	while (do_continue)
+	while (m_Continue)
 	{
 		const auto current_time = high_resolution_clock::now();
 		const float delta_time = duration<float>(current_time - last_time).count();
 		last_time = current_time;
 		lag += delta_time;
 
-		do_continue = input.ProcessInput();
+		m_Continue = input.ProcessInput();
 		while (lag >= fixed_time_step)
 		{
 			sceneManager.FixedUpdate();
@@ -126,4 +126,8 @@ void dae::Minigin::Run(const std::function<void()>& load)
 #else
 	emscripten_set_main_loop_arg(&LoopCallback, this, 0, true);
 #endif
+}
+
+void dae::Minigin::RunOneFrame()
+{
 }

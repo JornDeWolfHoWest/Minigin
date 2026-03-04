@@ -13,15 +13,9 @@ static const float PI = (3.14159265f);
 static const float DegToRadRatio = (PI / 180.0f);
 using namespace dae;
 
-RotatorComponent::RotatorComponent(Transform middle, float radius, float speed, GameObject* pOwner) :
-    BaseComponent(pOwner),
-    m_Middle(middle), m_Radius(radius), m_Speed(speed)
+RotatorComponent::RotatorComponent(float radius, float speed, GameObject* pOwner) :
+    BaseComponent(pOwner), m_Radius(radius), m_Speed(speed)
 {
-}
-
-RotatorComponent::~RotatorComponent()
-{
-
 }
 
 void RotatorComponent::Update(const float& deltaTime)
@@ -34,8 +28,8 @@ void RotatorComponent::Update(const float& deltaTime)
     double angleInRadians = m_Angle * DegToRadRatio;
 
     // Calculate the x and y coordinates
-    double x = m_Middle.GetPosition().x + m_Radius * std::cos(angleInRadians);
-    double y = m_Middle.GetPosition().y + m_Radius * std::sin(angleInRadians);
+    double x = m_Radius * std::cos(angleInRadians);
+    double y = m_Radius * std::sin(angleInRadians);
 
     GetOwner()->SetLocalPosition(static_cast<float>(x), static_cast<float>(y));
 }
@@ -47,10 +41,6 @@ void RotatorComponent::Render() const
 void RotatorComponent::SetRadius(float radius)
 {
     m_Radius = radius;
-}
-void RotatorComponent::SetPosition(Transform middle)
-{
-    m_Middle = middle;
 }
 void RotatorComponent::SetSpeed(float speed)
 {

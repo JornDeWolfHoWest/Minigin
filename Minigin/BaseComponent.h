@@ -14,7 +14,7 @@ namespace dae {
 		virtual void FixedUpdate() = 0;
 		virtual void Render() const = 0;
 	protected:
-		explicit BaseComponent(GameObject* pOwner) : m_pOwner(pOwner) {}
+		explicit BaseComponent(GameObject* pOwner) : m_pOwner(pOwner) { }
 		GameObject* GetOwner() const { return m_pOwner; }
 	private:
 		GameObject* m_pOwner;

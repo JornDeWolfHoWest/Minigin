@@ -40,7 +40,6 @@ namespace dae
 
     void FPSComponent::Render() const
     {
-        static_cast<TextObject*>(GetOwner())->Render();
     }
 
     void FPSComponent::SetPosition(const float x, const float y)

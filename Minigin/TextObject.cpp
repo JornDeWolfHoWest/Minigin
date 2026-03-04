@@ -32,13 +32,14 @@ void dae::TextObject::Update(const float& deltatime)
 	GameObject::Update(deltatime);
 }
 
-void dae::TextObject::Render() const
+void dae::TextObject::Render()
 {
-	if (m_textTexture != nullptr)
+	if (m_textTexture)
 	{
-		const auto& pos = m_transform.GetPosition();
-		Renderer::GetInstance().RenderTexture(*m_textTexture, pos.x, pos.y);
+		const auto& pos = GetWorldPosition();
+		Renderer::GetInstance().RenderTexture(*m_textTexture, pos.GetPosition().x, pos.GetPosition().y);
 	}
+	GameObject::Render();
 }
 
 void dae::TextObject::SetText(const std::string& text)

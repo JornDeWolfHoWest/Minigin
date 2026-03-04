@@ -12,16 +12,18 @@ namespace dae
 	public:
 		virtual void Update(const float& deltaTime);
 		virtual void FixedUpdate();
-		virtual void Render() const;
+		virtual void Render();
 
 		void SetTexture(const std::string& filename);
 		void SetLocalPosition(float x, float y, float z = 0);
 		void SetLocalPosition(Transform position);
 		void UpdateWorldPosition();
-		Transform GetLocalPosition() const;
-		Transform GetWorldPosition() const;
+		Transform GetLocalPosition();
+		Transform GetWorldPosition();
+		void SetPositionDirty();
 
 		void MarkForDeletion();
+		void CheckForDeletion();
 
 
 		bool IsChild(const GameObject* pChild) const;
@@ -29,6 +31,7 @@ namespace dae
 		bool IsComponent(BaseComponent* pComponent) const;
 		void AddComponent(BaseComponent* pComponent);
 		void RemoveComponent(BaseComponent* pComponent);
+		
 
 		GameObject(GameObject* parent) : m_pParent(parent) { if (parent) parent->AddChild(this); }
 		virtual ~GameObject();

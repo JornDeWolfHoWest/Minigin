@@ -8,7 +8,6 @@
 using namespace dae;
 
 GameObject::~GameObject() {
-	this;
 	for (int index = 0; index < m_pComponents.size(); index++)
 	{
 		delete m_pComponents[index];
@@ -43,11 +42,13 @@ void GameObject::FixedUpdate()
 	}
 }
 
-void GameObject::Render() const
+void GameObject::Render()
 {
-	const auto& pos = GetWorldPosition();
 	if (m_texture)
+	{
+		const auto& pos = GetWorldPosition();
 		Renderer::GetInstance().RenderTexture(*m_texture, pos.GetPosition().x, pos.GetPosition().y);
+	}
 	for (const auto& component : m_pComponents)
 	{
 		component->Render();
@@ -72,9 +73,8 @@ void GameObject::SetLocalPosition(float x, float y, float z)
 
 void GameObject::SetLocalPosition(Transform position)
 {
-	m_DirtyPosition = true;
+	SetPositionDirty();
 	m_LocalPosition = position;
-	UpdateWorldPosition();
 }
 
 void GameObject::UpdateWorldPosition()
@@ -89,18 +89,31 @@ void GameObject::UpdateWorldPosition()
 		{
 			m_WorldPosition = m_LocalPosition;
 		}
-		m_DirtyPosition = false;
+		SetPositionDirty();
 	}
 }
 
-Transform GameObject::GetLocalPosition() const
+Transform GameObject::GetLocalPosition()
 {
 	return m_LocalPosition;
 }
 
-Transform GameObject::GetWorldPosition() const
+Transform GameObject::GetWorldPosition()
 {
+	if (m_DirtyPosition)
+	{
+		UpdateWorldPosition();
+	}
 	return m_WorldPosition;
+}
+
+void dae::GameObject::SetPositionDirty()
+{
+	m_DirtyPosition = true;
+	for (auto child : m_pChildren)
+	{
+		child->SetPositionDirty();
+	}
 }
 
 void dae::GameObject::MarkForDeletion()
@@ -109,6 +122,19 @@ void dae::GameObject::MarkForDeletion()
 	for (auto child : m_pChildren)
 	{
 		child->m_MarkedForDeletion = true;
+	}
+}
+
+void dae::GameObject::CheckForDeletion()
+{
+	if (m_MarkedForDeletion)
+	{
+		delete this;
+		return;
+	}
+	for (auto child : m_pChildren)
+	{
+		child->CheckForDeletion();
 	}
 }
 
