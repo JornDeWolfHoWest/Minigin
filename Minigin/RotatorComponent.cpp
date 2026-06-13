@@ -33,11 +33,6 @@ void RotatorComponent::Update(const float& deltaTime)
 
     GetOwner()->SetLocalPosition(static_cast<float>(x), static_cast<float>(y));
 }
-
-void RotatorComponent::Render() const
-{
-
-}
 void RotatorComponent::SetRadius(float radius)
 {
     m_Radius = radius;

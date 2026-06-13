@@ -50,3 +50,8 @@ void Scene::Render()
 	}
 }
 
+const std::string& dae::Scene::GetName() const
+{
+	return m_name;
+}
+

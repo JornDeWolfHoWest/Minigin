@@ -7,16 +7,22 @@
 #include <sstream>
 #include <iomanip>
 #include "BaseComponent.h"
-#include "TextObject.h"
+#include "TextComponent.h"
+
 
 namespace dae
 {
-    FPSComponent::FPSComponent(TextObject* pOwner) :
+    FPSComponent::FPSComponent(GameObject* pOwner, TextComponent* pTextComponent) :
         BaseComponent(pOwner),
         m_FPS(0.f),
-		m_ElapsedTime(0.f)
+		m_ElapsedTime(0.f),
+        m_pTextComponent(pTextComponent)
     {
-		pOwner->SetText("0 FPS");
+		if (!m_pTextComponent)
+		{
+			throw std::runtime_error("FPSComponent requires a TextComponent");
+		}
+        m_pTextComponent->SetText("0 FPS");
     }
 
     FPSComponent::~FPSComponent()
@@ -35,8 +41,8 @@ namespace dae
         ss << std::fixed << std::setprecision(1) << m_FPS;
         std::string fps = ss.str() + " FPS";
 
-		static_cast<TextObject*>(GetOwner())->SetText(fps);
-    }
+		m_pTextComponent->SetText(fps);
+    } 
 
     void FPSComponent::Render() const
     {

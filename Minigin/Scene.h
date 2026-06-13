@@ -17,17 +17,20 @@ namespace dae
 		void FixedUpdate();
 		void Render();
 
+		Scene(const std::string& name) : m_name(name) {}
+
 		~Scene() = default;
 		Scene(const Scene& other) = delete;
 		Scene(Scene&& other) = delete;
 		Scene& operator=(const Scene& other) = delete;
 		Scene& operator=(Scene&& other) = delete;
 
+		[[nodiscard]] const std::string& GetName() const;
 	private:
 		friend class SceneManager;
-		explicit Scene() = default;
+		std::string m_name{};
 
-		std::vector < std::unique_ptr<GameObject>> m_objects{};
+		std::vector<std::unique_ptr<GameObject>> m_objects{};
 	};
 
 }

@@ -11,7 +11,6 @@ namespace dae {
     public:
         void Update(const float& deltaTime) override;
         void FixedUpdate() override {};
-        void Render() const override;
         void SetRadius(float radius);
         void SetSpeed(float speed);
 

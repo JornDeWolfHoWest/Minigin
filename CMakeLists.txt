@@ -18,22 +18,60 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/Font.cpp
   Minigin/GameObject.cpp
   Minigin/InputManager.cpp
-  Minigin/Main.cpp
+  QBertGame/Main.cpp
   Minigin/Minigin.cpp
   Minigin/Renderer.cpp
   Minigin/ResourceManager.cpp
   Minigin/Scene.cpp
   Minigin/SceneManager.cpp
-  Minigin/TextObject.cpp
+  
   Minigin/Texture2D.cpp
   Minigin/Transform.cpp
   Minigin/RotatorComponent.cpp
-  Minigin/FPSComponent.cpp)
+  Minigin/FPSComponent.cpp
+  
+  Minigin/RenderComponent.cpp
+  Minigin/TextComponent.cpp 
+  Minigin/ImGUIComponent.cpp
+
+  
+  QBertGame/LevelAndMovement/MakeLevelFactory.cpp
+  
+  QbertGame/LevelAndMovement/PlayerInput.cpp
+  QbertGame/LevelAndMovement/MovementSystem.cpp
+  QbertGame/LevelAndMovement/Walkable.cpp
+  QbertGame/LevelAndMovement/Level.cpp
+  QbertGame/LevelAndMovement/Score.cpp
+  QbertGame/LevelAndMovement/Disc.cpp
+  QbertGame/LevelAndMovement/LevelCube.cpp
+  QbertGame/LevelAndMovement/LevelCubeActivator.cpp
+  QbertGame/LevelAndMovement/Qbert.cpp
+  QbertGame/LevelAndMovement/QbertFactory.cpp
+  QbertGame/LevelAndMovement/Lives.cpp
+
+  QbertGame/LevelAndMovement/GameDone.cpp
+  QbertGame/LevelAndMovement/GameOver.cpp
+
+
+
+)
 
 # enable c++20 features
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)
 
 include(FetchContent)
+
+# add nlohmann json
+FetchContent_Declare(
+    nlohmann_json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.12.0
+    GIT_SHALLOW TRUE
+)
+
+FetchContent_MakeAvailable(nlohmann_json)
+
+
 # add glm
 find_package(glm CONFIG QUIET)
 if(NOT glm_FOUND)
@@ -104,6 +142,32 @@ if(NOT SDL3_ttf_FOUND)
     FetchContent_MakeAvailable(SDL3_ttf)
   endif()
 endif()
+# Dear ImGui
+FetchContent_Declare(
+  imgui
+  GIT_REPOSITORY https://github.com/ocornut/imgui
+  GIT_TAG v1.92.5-docking
+  GIT_SHALLOW TRUE
+)
+FetchContent_MakeAvailable(imgui)
+
+add_library(imgui STATIC
+  ${imgui_SOURCE_DIR}/imgui.cpp
+  ${imgui_SOURCE_DIR}/imgui_draw.cpp
+  ${imgui_SOURCE_DIR}/imgui_tables.cpp
+  ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+  ${imgui_SOURCE_DIR}/imgui_demo.cpp
+  ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl3.cpp
+  ${imgui_SOURCE_DIR}/backends/imgui_impl_sdlrenderer3.cpp
+)
+
+target_include_directories(imgui PUBLIC
+    ${imgui_SOURCE_DIR}
+    ${sdl3_SOURCE_DIR}/include
+${imgui_SOURCE_DIR}/backends)
+target_link_libraries(imgui PUBLIC SDL3::SDL3)
+# enable c++20 features
+target_compile_features(imgui PUBLIC cxx_std_20)
 
 if (WIN32)
   # Add VLD (Visual Leak Detector) for memory leak detection on Windows
@@ -117,14 +181,18 @@ find_package(Steamworks QUIET)
 target_include_directories("${TARGET_NAME}" PUBLIC
   ${CMAKE_SOURCE_DIR}/Minigin/
   ${VLD_INCLUDE_DIR}
+  ${imgui_SOURCE_DIR}
 )
 
 target_link_libraries("${TARGET_NAME}" PUBLIC
   SDL3::SDL3
   SDL3_ttf::SDL3_ttf
   glm::glm
+  imgui
+  nlohmann_json::nlohmann_json
   ${VLD_LIBRARIES}
 )
+
 
 if(MSVC)
   # compile at warning level 4 + treat warnings as errors

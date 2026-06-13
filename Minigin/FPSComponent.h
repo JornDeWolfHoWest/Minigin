@@ -5,7 +5,7 @@
 
 namespace dae
 {
-    class TextObject;
+    class TextComponent;
     class Font;
     class Texture2D;
     class FPSComponent final : public BaseComponent
@@ -16,7 +16,7 @@ namespace dae
         void Render() const override;
         void SetPosition(float x, float y);
 
-        FPSComponent(TextObject* pOwner);
+        FPSComponent(GameObject* pOwner, TextComponent* pTextComponent);
         virtual ~FPSComponent();
         FPSComponent(const FPSComponent& other) = delete;
         FPSComponent(FPSComponent&& other) = delete;
@@ -24,6 +24,7 @@ namespace dae
         FPSComponent& operator=(FPSComponent&& other) = delete;
 
     private:
+        TextComponent* m_pTextComponent;
         Transform m_transform{};
         float m_FPS;
 		float m_ElapsedTime;

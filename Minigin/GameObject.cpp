@@ -1,4 +1,5 @@
 #include <string>
+#include <algorithm>
 #include "GameObject.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
@@ -7,31 +8,46 @@
 
 using namespace dae;
 
-GameObject::~GameObject() {
-	for (int index = 0; index < m_pComponents.size(); index++)
-	{
-		delete m_pComponents[index];
-	}
-	for (int index = 0; index < m_pChildren.size(); index++)
-	{
-		delete m_pChildren[index];
-	}
+GameObject::GameObject()
+	: m_pParent(nullptr)
+	, m_DirtyPosition(false)
+	, m_MarkedForDeletion(false)
+	, m_pChildren()
+	, m_pComponents()
+	, m_WorldPosition()
+	, m_LocalPosition()
+	, m_WorldScale{-1,-1}
+{
+}
+
+GameObject::~GameObject()
+{
+	// children are stored as unique_ptr, they will be destroyed automatically
 }
 
 void GameObject::Update(const float& deltaTime)
 {
+	if (!m_IsActive)
+	{
+		return;
+	}
 	for (const auto& component : m_pComponents)
 	{
 		component->Update(deltaTime);
 	}
 	for (const auto& child : m_pChildren)
 	{
-		child->Update(deltaTime);
+		if (child)
+			child->Update(deltaTime);
 	}
 }
 
 void GameObject::FixedUpdate()
 {
+	if (!m_IsActive)
+	{
+		return;
+	}
 	for (int index = 0; index < m_pComponents.size(); index++)
 	{
 		m_pComponents[index]->FixedUpdate();
@@ -44,10 +60,9 @@ void GameObject::FixedUpdate()
 
 void GameObject::Render()
 {
-	if (m_texture)
+	if (!m_IsActive)
 	{
-		const auto& pos = GetWorldPosition();
-		Renderer::GetInstance().RenderTexture(*m_texture, pos.GetPosition().x, pos.GetPosition().y);
+		return;
 	}
 	for (const auto& component : m_pComponents)
 	{
@@ -57,11 +72,6 @@ void GameObject::Render()
 	{
 		child->Render();
 	}
-}
-
-void GameObject::SetTexture(const std::string& filename)
-{
-	m_texture = ResourceManager::GetInstance().LoadTexture(filename);
 }
 
 void GameObject::SetLocalPosition(float x, float y, float z)
@@ -98,7 +108,7 @@ Transform GameObject::GetLocalPosition()
 	return m_LocalPosition;
 }
 
-Transform GameObject::GetWorldPosition()
+Transform GameObject::GetWorldPosition() 
 {
 	if (m_DirtyPosition)
 	{
@@ -107,10 +117,22 @@ Transform GameObject::GetWorldPosition()
 	return m_WorldPosition;
 }
 
+void GameObject::SetWorldScale(float x, float y)
+{
+	m_WorldScale = { x, y };
+}
+
+
+glm::vec2 GameObject::GetWorldScale() const
+{
+	return m_WorldScale;
+}
+
+
 void dae::GameObject::SetPositionDirty()
 {
 	m_DirtyPosition = true;
-	for (auto child : m_pChildren)
+	for (auto &child : m_pChildren)
 	{
 		child->SetPositionDirty();
 	}
@@ -119,7 +141,7 @@ void dae::GameObject::SetPositionDirty()
 void dae::GameObject::MarkForDeletion()
 {
 	m_MarkedForDeletion = true;
-	for (auto child : m_pChildren)
+	for (auto &child : m_pChildren)
 	{
 		child->m_MarkedForDeletion = true;
 	}
@@ -132,33 +154,59 @@ void dae::GameObject::CheckForDeletion()
 		delete this;
 		return;
 	}
-	for (auto child : m_pChildren)
+	for (auto &child : m_pChildren)
 	{
 		child->CheckForDeletion();
 	}
 }
 
-bool dae::GameObject::IsChild(const GameObject* pChild) const
+bool dae::GameObject::IsChild(const std::unique_ptr<GameObject>& pChild) const
 {
 	return std::find(m_pChildren.begin(), m_pChildren.end(), pChild) != m_pChildren.end();
 }
 
-void dae::GameObject::AddChild(GameObject* pChild)
+std::unique_ptr<GameObject> GameObject::DetachChild(GameObject* pChild)
 {
-	m_pChildren.push_back(pChild);
+	auto it = std::find_if(
+		m_pChildren.begin(),
+		m_pChildren.end(),
+		[pChild](const std::unique_ptr<GameObject>& child)
+		{
+			return child.get() == pChild;
+		});
+
+	if (it == m_pChildren.end())
+	{
+		return nullptr;
+	}
+
+	(*it)->m_pParent = nullptr;
+
+	std::unique_ptr<GameObject> detached = std::move(*it);
+	m_pChildren.erase(it);
+
+	return detached;
 }
 
-bool dae::GameObject::IsComponent(BaseComponent* pComponent) const
+void dae::GameObject::AddChild(std::unique_ptr<GameObject> pChild)
+{
+	if (!pChild)
+		return;
+	pChild->m_pParent = this;
+	m_pChildren.push_back(std::move(pChild));
+}
+
+bool dae::GameObject::IsComponent( const std::unique_ptr<BaseComponent>& pComponent) const
 {
 	return std::find(m_pComponents.begin(), m_pComponents.end(), pComponent) != m_pComponents.end();
 }
 
-void dae::GameObject::AddComponent(BaseComponent* pComponent)
+void dae::GameObject::AddComponent(std::unique_ptr<BaseComponent> pComponent)
 {
-	m_pComponents.push_back(pComponent);
+	m_pComponents.push_back(std::move(pComponent));
 }
 
-void dae::GameObject::RemoveComponent(BaseComponent* pComponent)
+void dae::GameObject::RemoveComponent(std::unique_ptr<BaseComponent>&	 pComponent)
 {
 	auto iterator = std::find(m_pComponents.begin(), m_pComponents.end(), pComponent);
 	m_pComponents.erase(iterator);

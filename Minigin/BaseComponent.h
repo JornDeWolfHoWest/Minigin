@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 namespace dae {
 
 	class GameObject;
@@ -15,7 +16,8 @@ namespace dae {
 		virtual void Render() const = 0;
 	protected:
 		explicit BaseComponent(GameObject* pOwner) : m_pOwner(pOwner) { }
-		GameObject* GetOwner() const { return m_pOwner; }
+
+		[[nodiscard]] GameObject* GetOwner() const { return m_pOwner; }
 	private:
 		GameObject* m_pOwner;
 	};
