@@ -1,88 +1,94 @@
-﻿# Minigin
+﻿# Q*bert (Minigin Engine)
 
-Minigin is a very small project using [SDL3](https://www.libsdl.org/) and [glm](https://github.com/g-truc/glm) for 2D c++ game projects. It is in no way a game engine, only a barebone start project where everything sdl related has been set up. It contains glm for vector math, to aleviate the need to write custom vector and matrix classes.
+Link to project: [https://github.com/JornDeWolfHoWest/Minigin.git](https://github.com/JornDeWolfHoWest/Minigin.git)
 
-[![Build Status](https://github.com/JornDeWolfHoWest/Minigin/actions/workflows/cmake.yml/badge.svg)](https://github.com/JornDeWolfHoWest/cmake/actions)
-[![Build Status](https://github.com/JornDeWolfHoWest/Minigin/actions/workflows/emscripten.yml/badge.svg)](https://github.com/JornDeWolfHoWest/emscripten/actions)
-[![GitHub Release](https://img.shields.io/github/v/release/JornDeWolfHoWest/Minigin?logo=github&sort=semver)](https://github.com/JornDeWolfHoWest/minigin/releases/latest)
+A recreation of the classic arcade game **Q*bert**, built using the custom **Minigin game engine** in C++.
 
-# Goal
+---
 
-Minigin can/may be used as a start project for the exam assignment in the course [Programming 4](https://youtu.be/j96Oh6vzhmg) at DAE. In that assignment students need to recreate a popular 80's arcade game with a game engine they need to program themselves. During the course we discuss several game programming patterns, using the book '[Game Programming Patterns](https://gameprogrammingpatterns.com/)' by [Robert Nystrom](https://github.com/munificent) as reading material. 
+## About the Game
 
-# Disclaimer
+Q*bert is a tile-based arcade game where the player controls a character that hops across a pyramid of cubes.  
+The goal is to change all cubes to the target color while avoiding enemies and hazards.
 
-Minigin is, despite perhaps the suggestion in its name, **not** a game engine. It is just a very simple SDL3 ready project with some of the scaffolding in place to get started. None of the patterns discussed in the course are used yet (except singleton which use we challenge during the course). It is up to the students to implement their own vision for their engine, apply patterns as they see fit, create their game as efficient as possible.
+This project recreates the core gameplay mechanics including:
+- Grid-based movement on a pyramid
+- Tile state changes
+- Falling mechanics
+- Scene-based structure using the Minigin engine
 
-# Use
+---
 
-Get the source from this project, or since students need to have their work on github too, they can use this repository as a template. Hit the "Use this template" button on the top right corner of the github page of this project.
+## Built With
 
-## Windows version
+- C++
+- Minigin Engine
+- SDL3
+- GLM
 
-Either
-- Open the root folder in Visual Studio 2026; this will be recognized as a cmake project.
-  
-Or
-- Install CMake 
-- Install CMake and CMake Tools extensions in Visual Code
-- Open the root folder in Visual Code,  this will be recognized as a cmake project.
+---
 
-Or
-- Use whatever editor you like :)
+## Gameplay
 
-## Emscripten (web) version
+- Move Q*bert using directional input (Up, Down, Left, Right)
+- Jump across the pyramid of cubes
+- Change cube states by landing on them
+- Fall off the pyramid if stepping into invalid space
+- Winning if all cubes are changed to the target color
 
-### On windows
+---
 
-For installing all of the needed tools on Windows I recommend using [Chocolatey](https://chocolatey.org/). You can then run the following in a terminal to install what is needed:
+## Architecture Overview
 
-    choco install -y cmake
-    choco install -y emscripten
-    choco install -y ninja
-    choco install -y python
+This project is built using the Minigin ECS-style-esque architecture:
 
-In a terminal, navigate to the root folder. Run this: 
+- GameObject -> container for components
+- BaseComponent -> logic modules attached to objects
+- SceneManager -> handles multiple scenes and switching
 
-    mkdir build_web
-    cd build_web
-    emcmake cmake ..
-    emmake ninja
+---
 
-To be able to see the webpage you can start a python webserver in the build_web folder
+## Project Structure
 
-    python -m http.server
 
-Then browse to http://localhost:8000 and you're good to go.
+/Engine -> Minigin engine source
+/Game -> Q*bert game logic
 
-### On OSX
 
-On Mac you can use homebrew
+---
 
-    brew install cmake
-    brew install emscripten
-    brew install python
+## Key Systems
 
-In a terminal on OSX, navigate to the root folder. Run this: 
+### Movement System
+Uses semi-linear interpolation between walkable nodes transition between tiles.
 
-    mkdir build_web
-    cd build_web
-    emcmake cmake .. -DCMAKE_OSX_ARCHITECTURES=""
-    emmake make
+### Scene System
+Supports multiple scenes with safe switching using a deferred singleton scene manager.
 
-To be able to see the webpage you can start a python webserver in the build_web folder
+### Walkable Grid
+Each cube can be walked on, if you wish to walk off then that is also possible.
 
-    python3 -m http.server
+### Observer Pattern
+Used to notify systems when movement events occur (falling, stepping, etc.).
 
-Then browse to http://localhost:8000 and you're good to go.
+---
 
-## Github Actions
+## Build Instructions
 
-This project is build with github actions.
-- The CMake workflow builds the project in Debug and Release for Windows and serves as a check that the project builds on that platform.
-- The Emscripten workflow generates a web version of the project and publishes it as a [github page](https://JornDeWolfHoWest.github.io/Minigin/). 
-  - The url of that page will be `https://<username>.github.io/<repository>/`
-- You can embed this page with 
+### Requirements
+- Visual Studio 2026 or later
+- C++20 or higher
+- cmake compatible build system
 
-```<iframe style="position: absolute; top: 0px; left: 0px; width: 1024px; height: 576px;" src="https://<username>.github.io/<repository>/" loading="lazy"></iframe>```
+### Steps
+1. Clone repository
+2. Open solution file (`.sln`)
+3. Build in Debug or Release
+4. Run executable
 
+---
+
+## Extra
+
+- Developed using the Minigin Engine
+- Recreation of the classic arcade game Q*bert without enemies
