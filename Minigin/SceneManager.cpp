@@ -2,7 +2,7 @@
 #include "Scene.h"
 
 
-void dae::SceneManager::SwitchScene(const std::string& name)
+void dae::SceneManager::SwitchScene(const std::string& name, bool forceSwitch)
 {
 	const auto it = std::ranges::find_if(
 		m_Scenes,
@@ -15,6 +15,12 @@ void dae::SceneManager::SwitchScene(const std::string& name)
 		return;
 
 	m_SceneToSwitchTo = *(it);
+
+	if (forceSwitch)
+	{
+		m_ActiveScene = m_SceneToSwitchTo;
+		return;
+	}
 	m_SceneSwitchRequested = true;
 }
 

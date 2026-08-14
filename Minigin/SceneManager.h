@@ -12,11 +12,13 @@ namespace dae
 	public:
 		void RemoveSceneIfExists(const std::string& name);
 		Scene& CreateScene(const std::string& name);
-		void SwitchScene(const std::string& name);
+		void SwitchScene(const std::string& name, bool forceSwitch = false);
 
 		void Update(const float& deltaTime);
 		void FixedUpdate() const;
 		void Render() const;
+
+		[[nodiscard]] Scene* GetActiveScene() const { return m_ActiveScene.get(); }
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;

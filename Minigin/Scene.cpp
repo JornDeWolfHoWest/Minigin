@@ -36,9 +36,29 @@ void Scene::FixedUpdate()
 
 void Scene::Update(const float& deltaTime)
 {
+	// First delete all objects that are marked for deletion-
+	if (m_objects.size() > 0)
+	{
+		for (int i = static_cast<int>(m_objects.size()) - 1; i >= 0; --i)
+		{
+			if (m_objects[i]->IsMarkedForDeletion())
+			{
+				auto* rawPtr = m_objects[i].release();
+
+				m_objects.erase(m_objects.begin() + i);
+				rawPtr->CheckForDeletion();
+			}
+			else
+			{
+				m_objects[i]->CheckForDeletion();
+			}
+		}
+	}
+
+
 	for(auto& object : m_objects)
 	{
-		object->Update(deltaTime);
+	 	object->Update(deltaTime);
 	}
 }
 

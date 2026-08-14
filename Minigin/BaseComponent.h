@@ -14,10 +14,15 @@ namespace dae {
 		virtual void Update(const float&) = 0;
 		virtual void FixedUpdate() = 0;
 		virtual void Render() const = 0;
+
+		virtual void SetActive(bool active) { m_IsActive = active; }
+		[[nodiscard]] virtual bool IsActive() const { return m_IsActive; }
+
 	protected:
 		explicit BaseComponent(GameObject* pOwner) : m_pOwner(pOwner) { }
 
 		[[nodiscard]] GameObject* GetOwner() const { return m_pOwner; }
+		bool m_IsActive{ true };
 	private:
 		GameObject* m_pOwner;
 	};

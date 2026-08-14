@@ -18,7 +18,6 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/Font.cpp
   Minigin/GameObject.cpp
   Minigin/InputManager.cpp
-  QBertGame/Main.cpp
   Minigin/Minigin.cpp
   Minigin/Renderer.cpp
   Minigin/ResourceManager.cpp
@@ -34,27 +33,52 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/TextComponent.cpp 
   Minigin/ImGUIComponent.cpp
 
-  
-  QBertGame/LevelAndMovement/MakeLevelFactory.cpp
-  
-  QbertGame/LevelAndMovement/PlayerInput.cpp
-  QbertGame/LevelAndMovement/MovementSystem.cpp
-  QbertGame/LevelAndMovement/Walkable.cpp
-  QbertGame/LevelAndMovement/Level.cpp
-  QbertGame/LevelAndMovement/Score.cpp
-  QbertGame/LevelAndMovement/Disc.cpp
-  QbertGame/LevelAndMovement/LevelCube.cpp
-  QbertGame/LevelAndMovement/LevelCubeActivator.cpp
-  QbertGame/LevelAndMovement/Qbert.cpp
-  QbertGame/LevelAndMovement/QbertFactory.cpp
-  QbertGame/LevelAndMovement/Lives.cpp
-
-  QbertGame/LevelAndMovement/GameDone.cpp
-  QbertGame/LevelAndMovement/GameOver.cpp
 
 
+ "BubbleBobble/LevelParser.cpp"
+ "BubbleBobble/Main.cpp"
+ "BubbleBobble/GameSettings.cpp"
+ "BubbleBobble/SpriteComponent.cpp"
+ "BubbleBobble/MainMenu/SelectorComponent.cpp"
+ "BubbleBobble/PlayerComponents/ScoreObserverComponent.cpp"
+ "BubbleBobble/PlayerComponents/HealthObserverComponent.cpp"
+ "BubbleBobble/Level/TileComponent.cpp"
+ "BubbleBobble/Level/ColliderComponent.cpp"
+ "BubbleBobble/Enemy/ZenChanComponent.cpp"
+ "BubbleBobble/AnimationComponent.cpp"
+ "BubbleBobble/RigidBodyComponent.cpp"
 
-)
+ "BubbleBobble/PlayerComponents/PlayerComponent.cpp"
+ "BubbleBobble/PlayerComponents/HealthComponent.cpp"
+ "BubbleBobble/PlayerComponents/PlayerEventHandlerComponent.cpp"
+
+ "BubbleBobble/States/StateComponent.cpp"
+
+ "BubbleBobble/States/ZenChan/ZenChanChaseState.cpp"
+ "BubbleBobble/States/ZenChan/ZenChanSpawnState.cpp"
+ "BubbleBobble/States/ZenChan/ZenChanVulnerableState.cpp"
+
+ "BubbleBobble/States/Player/FallState.cpp"
+ "BubbleBobble/States/Player/MoveState.cpp"
+ "BubbleBobble/States/Player/HitState.cpp"
+ "BubbleBobble/States/Player/IdleState.cpp"
+ "BubbleBobble/States/Player/JumpState.cpp"
+ "BubbleBobble/States/Player/ShootState.cpp"
+ "BubbleBobble/States/Player/SpawnState.cpp"
+
+ "BubbleBobble/States/Bubble/BubbleIdleState.cpp"
+ "BubbleBobble/States/Bubble/BubblePopState.cpp"
+ "BubbleBobble/States/Bubble/BubbleShotState.cpp"
+ "BubbleBobble/States/Bubble/BubbleSpawnState.cpp"
+
+ "BubbleBobble/Bubble/BubbleEventHandler.cpp"
+ "BubbleBobble/Bubble/BubbleComponent.cpp"
+   "BubbleBobble/PlayerComponents/ShootBubbleComponent.cpp"
+   "BubbleBobble/PlayerComponents/ScoreComponent.cpp"
+   "BubbleBobble/Food/FoodComponent.cpp"
+
+   "Minigin/Services/SDLSoundSystem.cpp"
+   "Minigin/Services/SoundService.cpp")
 
 # enable c++20 features
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)
@@ -72,16 +96,18 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(nlohmann_json)
 
 
-# add glm
+# Add GLM
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+
 find_package(glm CONFIG QUIET)
 if(NOT glm_FOUND)
-  FetchContent_Declare(
-    glm
-    URL https://github.com/g-truc/glm/releases/download/1.0.3/glm-1.0.3.zip
-    DOWNLOAD_NO_PROGRESS ON
-    DOWNLOAD_DIR ${CMAKE_BINARY_DIR}/downloads
-  )
-  FetchContent_MakeAvailable(glm)
+    FetchContent_Declare(
+        glm
+        URL https://github.com/g-truc/glm/releases/download/1.0.3/glm-1.0.3.zip
+        DOWNLOAD_NO_PROGRESS ON
+        DOWNLOAD_DIR ${CMAKE_BINARY_DIR}/downloads
+    )
+    FetchContent_MakeAvailable(glm)
 endif()
 
 # Add SDL3
@@ -179,7 +205,9 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/steam")
 find_package(Steamworks QUIET)
 
 target_include_directories("${TARGET_NAME}" PUBLIC
-  ${CMAKE_SOURCE_DIR}/Minigin/
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}/Minigin/
+  ${CMAKE_CURRENT_SOURCE_DIR}/BubbleBobble
   ${VLD_INCLUDE_DIR}
   ${imgui_SOURCE_DIR}
 )

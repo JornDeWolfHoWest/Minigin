@@ -1,21 +1,19 @@
-﻿# Q*bert (Minigin Engine)
+﻿# Bubble Bobble (Minigin Engine)
 
 Link to project: [https://github.com/JornDeWolfHoWest/Minigin.git](https://github.com/JornDeWolfHoWest/Minigin.git)
 
-A recreation of the classic arcade game **Q*bert**, built using the custom **Minigin game engine** in C++.
+A recreation of the classic arcade game **Bubble Bobble**, built using the custom **Minigin game engine** in C++.
 
 ---
 
 ## About the Game
 
-Q*bert is a tile-based arcade game where the player controls a character that hops across a pyramid of cubes.  
-The goal is to change all cubes to the target color while avoiding enemies and hazards.
+Bubble Bobble is a tile-based arcade game where the player controls a character that can hop up and down, move left and right and blow bubbles.  
+the goal is to blow bubbles onto the enemies and trap them, then pop the bubbles to defeat the enemies. The game is played on a grid of platforms, and the player must navigate through the levels while avoiding enemies and obstacles.
 
-This project recreates the core gameplay mechanics including:
-- Grid-based movement on a pyramid
-- Tile state changes
-- Falling mechanics
-- Scene-based structure using the Minigin engine
+This project recreates some of the core gameplay mechanics of Bubble Bobble, including movement, jumping, and bubble-blowing.
+Such as:
+Jumping between platforms, and falling off the platforms if the player steps into invalid space. The game is won by changing all the platforms to a target state.
 
 ---
 
@@ -30,11 +28,10 @@ This project recreates the core gameplay mechanics including:
 
 ## Gameplay
 
-- Move Q*bert using directional input (Up, Down, Left, Right)
-- Jump across the pyramid of cubes
-- Change cube states by landing on them
-- Fall off the pyramid if stepping into invalid space
-- Winning if all cubes are changed to the target color
+Use the arrow keys to move, up to jump and space to shoot
+
+use the D-PAD to move, A to jump and B to shoot
+
 
 ---
 
@@ -45,6 +42,7 @@ This project is built using the Minigin ECS-style-esque architecture:
 - GameObject -> container for components
 - BaseComponent -> logic modules attached to objects
 - SceneManager -> handles multiple scenes and switching
+- Using Unique_ptr for memory management and ownership of components and game objects
 
 ---
 
@@ -52,7 +50,7 @@ This project is built using the Minigin ECS-style-esque architecture:
 
 
 /Engine -> Minigin engine source
-/Game -> Q*bert game logic
+/Game -> Bubble Bobble game logic
 
 
 ---
@@ -66,10 +64,13 @@ Uses semi-linear interpolation between walkable nodes transition between tiles.
 Supports multiple scenes with safe switching using a deferred singleton scene manager.
 
 ### Walkable Grid
-Each cube can be walked on, if you wish to walk off then that is also possible.
+Each cube can be walked on, if you wish to walk off then that is also possible. you will fall and get an animation
 
 ### Observer Pattern
-Used to notify systems when movement events occur (falling, stepping, etc.).
+Used to notify systems when movement events occur (touching enemy, etc.).
+
+### State pattern
+Using states and a state pattern system for the animations & movement of enemy & bubble
 
 ---
 
@@ -91,4 +92,4 @@ Used to notify systems when movement events occur (falling, stepping, etc.).
 ## Extra
 
 - Developed using the Minigin Engine
-- Recreation of the classic arcade game Q*bert without enemies
+- Recreation of the classic NES game Bubble Bobble with one enemy

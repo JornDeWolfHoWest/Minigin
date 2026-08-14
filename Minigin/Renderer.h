@@ -19,8 +19,9 @@ namespace dae
 		void Destroy();
 
 		void RenderTexture(const Texture2D& texture, float x, float y) const;
+		void RenderTexture(const Texture2D& texture, float x, float y, const SDL_Rect& srcRect, SDL_FlipMode flip = SDL_FLIP_NONE) const;
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
-
+		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height, const SDL_Rect& srcRect, SDL_FlipMode flip = SDL_FLIP_NONE) const;
 		SDL_Renderer* GetSDLRenderer() const;
 
 		const SDL_Color& GetBackgroundColor() const { return m_clearColor; }

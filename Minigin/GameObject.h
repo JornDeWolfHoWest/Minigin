@@ -40,9 +40,10 @@ namespace dae
 		void RemoveComponent(std::unique_ptr<BaseComponent>& pComponent);
 
 		template<typename Component>
-		Component* GetComponent();
+		Component* GetComponent(bool searchChildren = false);
+
 		template<typename Component>
-		std::vector<Component*> GetComponents(bool searchChildren = true);
+		std::vector<Component*> GetComponents(bool searchChildren = false);
 
 		GameObject();
 		virtual ~GameObject();
@@ -67,7 +68,7 @@ namespace dae
 
 
 	template<typename Component>
-	inline Component* GameObject::GetComponent()
+	inline Component* GameObject::GetComponent(bool searchChildren)
 	{
 		for (const auto& component : m_pComponents)
 		{
@@ -76,13 +77,28 @@ namespace dae
 				return castedComponent;
 			}
 		}
+
+		if (searchChildren)
+		{
+			for (auto& child : m_pChildren)
+			{
+				if (child)
+				{
+					if (auto childComponent = child->GetComponent<Component>(true))
+					{
+						return childComponent;
+					}
+				}
+			}
+		}
+
 		return nullptr;
 	}
 
 	template<typename Component>
 	inline std::vector<Component*> GameObject::GetComponents(bool searchChildren)
 	{
-		std::vector<Component*> components = std::vector<Component*>();
+		std::vector<Component*> components;
 		for (const auto& component : m_pComponents)
 		{
 			if (auto castedComponent = dynamic_cast<Component*>(component.get()))
@@ -90,6 +106,19 @@ namespace dae
 				components.push_back(castedComponent);
 			}
 		}
+
+		if (searchChildren)
+		{
+			for (const auto& child : m_pChildren)
+			{
+				if (child)
+				{
+					auto childComponents = child->GetComponents<Component>(true);
+					components.insert(components.end(), childComponents.begin(), childComponents.end());
+				}
+			}
+		}
+
 		return components;
 	}
 }
